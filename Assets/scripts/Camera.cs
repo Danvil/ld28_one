@@ -3,15 +3,18 @@ using System.Collections;
 
 public class Camera : MonoBehaviour {
 
-	static float SPEED = 1;
-
+	void Awake() {
+		Globals.camera = this;
+	}
+	
 	void Start() {
 	
 	}
 	
 	void Update() {
-		float dy = Input.GetAxis("Vertical") * SPEED;
-		float dx = Input.GetAxis("Horizontal") * SPEED;
-		camera.transform.position += new Vector3(dx, dy, 0);
+		float x = Globals.player.transform.position.x;
+		float y = this.transform.position.y;
+		float z = this.transform.position.z;
+		this.transform.position = new Vector3(x,y,z);
 	}
 }
