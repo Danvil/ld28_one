@@ -26,6 +26,8 @@ public class Drone : MonoBehaviour {
 		}
 		else {
 			this.transform.position += (Time.deltaTime*speed/dxb)*dx.XY0();
+			// flip if necessary
+			this.transform.localScale = new Vector3((dx.x < 0 ? -1 : +1), 1, 1);
 		}
 	}
 }

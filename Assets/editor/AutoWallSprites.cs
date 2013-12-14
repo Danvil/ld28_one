@@ -23,11 +23,15 @@ public class AutoWallSprites : EditorWindow
 	}
 
 	void Execute() {
-		WallTile wt = obj.GetComponent<WallTile>();
-
 		UnityEngine.Object[] allSprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(
 			"Assets/sprites/" + spriteName + ".png");
-		wt.sprites = allSprites.Cast<Sprite>().ToArray();
+		Sprite[] sprites = allSprites.Cast<Sprite>().ToArray();
+
+		WallTile wt = obj.GetComponent<WallTile>();
+		if(wt != null) wt.sprites = sprites;
+
+		Number num = obj.GetComponent<Number>();
+		if(num != null) num.sprites = sprites;
 	}
 }
 
