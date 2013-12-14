@@ -31,14 +31,33 @@ public class AgentMove : MonoBehaviour {
 		}
 	}
 
-	public float MoveDx { get; set; }
+	private float moveDx;
+	public float MoveDx {
+		get { return moveDx; }
+		set {
+			moveDx = value;
+			if(moveDx > 1) moveDx = 1;
+			if(moveDx < -1) moveDx = -1;
+			if(Mathf.Abs(moveDx) < 0.01) moveDx = 0;
+		}
+	}
+
 	public bool DoJump { get; set; }
+
+	bool TestForSupport() {
+		RaycastHit2D hit1 = Physics2D.Raycast(this.transform.position, -Vector2.up,
+		                                      jumpSupportPoint, jumpSupportLayerMask);
+		RaycastHit2D hit2 = Physics2D.Raycast(this.transform.position, -Vector2.up + Vector2.right,
+		                                      Mathf.Sqrt(2.0f)*jumpSupportPoint, jumpSupportLayerMask);
+		RaycastHit2D hit3 = Physics2D.Raycast(this.transform.position, -Vector2.up - Vector2.right,
+		                                      Mathf.Sqrt(2.0f)*jumpSupportPoint, jumpSupportLayerMask);
+		return hit1 || hit2 || hit3;
+	}
 	
 	void FixedUpdate() {
 		Vector3 force = Vector3.zero;
 		// check if agent is supported from below
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, -Vector2.up, jumpSupportPoint, jumpSupportLayerMask);
-		hasSupport = hit;
+		hasSupport = TestForSupport();
 		// move left/right
 		float dx = MoveDx * walkForce;
 		if(Mathf.Abs(dx) > 0) {

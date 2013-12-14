@@ -3,13 +3,16 @@ using System.Collections;
 
 public class AgentAI : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+	AgentMove am;
 	
+	public float desiredX;
+
+	void Start() {
+		am = GetComponent<AgentMove>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	void Update() {
+		float dx = desiredX - this.transform.position.x;
+		am.MoveDx = dx;
 	}
 }
