@@ -110,12 +110,33 @@ public class LevelGenerator : MonoBehaviour
 
 	const int BW = 12;
 	const int BH = 8;
-	const int NW = 4;
-	const int NH = 3;
+
+	public struct Parameters
+	{
+		public int nw, nh;
+		public float droneProp;
+		public float agentProp;
+
+		public static Parameters Defaults() {
+			Parameters p = new Parameters();
+			p.nw = 4;
+			p.nh = 3;
+			p.agentProp = 0.15f;
+			p.droneProp = 0.01f;
+			return p;
+		}
+	}
+	
+	Parameters parameters;
+	
+	int NW { get { return parameters.nw; } }
+	int NH { get { return parameters.nh; } }
+
 	const float DROP_PROP = 0.3f;
 	const float FROP_PROP = 0.3f;
-	const float AGENT_PROP = 0.15f;
-	const float DRONE_PROP = 0.01f;
+
+	float AGENT_PROP { get { return parameters.agentProp; } }
+	float DRONE_PROP { get { return parameters.droneProp; } }
 
 	// top: 1, right: 2, bottom: 4, left: 8
 	// 0 = not initialized
@@ -504,8 +525,9 @@ public class LevelGenerator : MonoBehaviour
 			}
 		}
 	}
-	
-	public Level CreateRandomLevel() {
+
+	public Level CreateRandomLevel(Parameters par) {
+		parameters = par;
 		// init blocks
 		int[,] blocks = new int[NH,NW];
 		for(int y=0; y<NH; y++) {
@@ -515,7 +537,7 @@ public class LevelGenerator : MonoBehaviour
 		}
 
 		// choose random block in first row
-		int x0 = Random.Range(1, NW-1);
+		int x0 = (NH == 1 ? (Random.Range(0,2) == 0 ? 0 : NW-1) : Random.Range(0, NW));
 		int x0y0 = x0;
 		for(int y=0; y<NH; y++) {
 			x0 = BlockARow(blocks, x0, y, y != 0 && y != NH-1);

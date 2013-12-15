@@ -31,7 +31,7 @@ public class LoadLevel : EditorWindow
 
 	void ExecuteRandom() {
 		LevelGenerator lvlgen = lvlGenGo.GetComponent<LevelGenerator>();
-		Level level = lvlgen.CreateRandomLevel();
+		Level level = lvlgen.CreateRandomLevel(LevelGenerator.Parameters.Defaults());
 		lvlgen.CreateGameobjects(level);
 	}
 

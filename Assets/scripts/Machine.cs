@@ -21,8 +21,8 @@ public class Machine : MonoBehaviour {
 		}
 	}
 
-	void ShowSkillMessage() {
-		const float MSG_DUR = 5.0f;
+	IEnumerator ShowSkillMessage() {
+		const float MSG_DUR = 1.76f;
 		string[] msgs = {
 			"#1: For loosers only",
 			"#2: Secret ninja skills!",
@@ -32,6 +32,16 @@ public class Machine : MonoBehaviour {
 			"#6: Glamor!"
 		};
 		Globals.messages.Show(msgs[num-1], MSG_DUR);
+		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+		string[] answer = {
+			"\"I can't stand it anymore!\"",
+			"\"They will tast my steel.\"",
+			"\"No one can keep my down!\"",
+			"\"The hand is faster than the eye.\"",
+			"\"Nothing can stop me now!\"",
+			"\"Let them eat cake\""
+		};
+		Globals.messages.Show(answer[num-1], MSG_DUR);
 	}
 
 	void Update() {
@@ -39,7 +49,7 @@ public class Machine : MonoBehaviour {
 			return;
 		}
 		float dist = (Globals.player.transform.position - goPill.transform.position).XY().magnitude;
-		if(dist < 0.3f) {
+		if(dist < 0.5f) {
 			// eat pill
 			StartCoroutine(Tools.CreateParticleEffect(pfPill, this.transform.position));
 			// give skill
@@ -65,7 +75,7 @@ public class Machine : MonoBehaviour {
 			default: break;
 			}
 			// message
-			ShowSkillMessage();
+			StartCoroutine(ShowSkillMessage());
 			// remove pill
 			hasPill = false;
 			goPill.renderer.enabled = false;

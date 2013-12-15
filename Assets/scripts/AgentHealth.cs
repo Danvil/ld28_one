@@ -15,6 +15,7 @@ public class AgentHealth : MonoBehaviour {
 			if(IsDead) {
 				return;
 			}
+
 			health = value;
 			if(health <= 0) {
 				Die();
@@ -64,23 +65,35 @@ public class AgentHealth : MonoBehaviour {
 
 	float EnergyToDamage(float e) {
 		// 3*3*10 = 90
+		// 4*4*10 = 160
 		// 6*6*10 = 360
-		return Mathf.Max(0,e-100.0f) / 100.0f;
+		// 8*8*10 = 640
+		return Mathf.Max(0,e-450.0f) / 200.0f;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
 		if(IsDead) {
 			return;
 		}
-		float v = collision.relativeVelocity.magnitude;
-		if(!IsPlayer) {
-			// kinetic energy
-			float e = 0.5f*collision.rigidbody.mass*v*v;
-			// energy to damage
-			float dmg = EnergyToDamage(e);
-			// take damage
-			Health -= dmg;
+		if(collision.rigidbody == null) {
+			return;
 		}
+		float v = collision.relativeVelocity.magnitude;
+		float dmgScl = (IsPlayer ? 0.5f : 1.0f);
+		// kinetic energy
+		float e = 0.5f*collision.rigidbody.mass*v*v;
+		// energy to damage
+		float dmg = dmgScl * EnergyToDamage(e);
+		if(dmg == 0) {
+			return;
+		}
+
+		if(this.gameObject == Globals.player.gameObject) {
+			Globals.messages.Show(string.Format("e={0:0.00}, d={1:0.00}", e, dmg), 0.3f);
+		}
+		
+		// take damage
+		Health -= dmg;
 	}
 
 }
