@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AgentMove : MonoBehaviour {
 	
-	static int jumpSupportLayerMask = (1<<8) + (1<<9) + (1<<10);
+	int JUMP_SUPPORT_LAYER_MASK;
 	static float jumpSupportRad = 0.05f;
 	
 	public float walkForce = 450.0f;
@@ -41,7 +41,7 @@ public class AgentMove : MonoBehaviour {
 	public bool DoJump { get; set; }
 
 	bool TestForSupport() {
-		return Tools.ThreeRayTest2D((CircleCollider2D)this.collider2D, this.transform, -Vector2.up, jumpSupportRad, 0.73f, jumpSupportLayerMask);
+		return Tools.ThreeRayTest2D((CircleCollider2D)this.collider2D, this.transform, -Vector2.up, jumpSupportRad, 0.73f, JUMP_SUPPORT_LAYER_MASK);
 	}
 
 	void Awake() {
@@ -49,6 +49,11 @@ public class AgentMove : MonoBehaviour {
 	}
 	
 	void Start() {
+		JUMP_SUPPORT_LAYER_MASK =
+			(1<<LayerMask.NameToLayer("Wall")) +
+			(1<<LayerMask.NameToLayer("Objects")) +
+			(1<<LayerMask.NameToLayer("Scenery")) +
+			(1<<LayerMask.NameToLayer("Agents"));
 	}
 
 	void Update() {

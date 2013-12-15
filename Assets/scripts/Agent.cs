@@ -11,6 +11,10 @@ public class Agent : MonoBehaviour {
 
 	public bool IsDead { get { return health.IsDead; } }
 
+	public bool HasDump {
+		get; set;
+	}
+
 	public bool HasNumberOne {
 		get { return false; }
 		set { }

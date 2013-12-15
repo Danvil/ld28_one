@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 static public class Tools
 {
@@ -34,6 +35,18 @@ static public class Tools
 	static public RaycastHit2D PickNeighbour(CircleCollider2D cc2, Transform t, Vector2 dir, float rad, int mask) {
 		Vector2 p = t.position.XY() + t.localScale.XY().CwMult(cc2.center);
 		return Physics2D.Raycast(p + cc2.radius*1.05f*dir, dir, rad, mask);
+	}
+
+	static public IEnumerator CreateParticleEffect(GameObject pf, Vector2 position) {
+		GameObject a = (GameObject)GameObject.Instantiate(pf);
+		a.transform.position = position.XY0() + new Vector3(0,0,-3);
+		float dur = 0.0f;
+		foreach(var ps in a.GetComponentsInChildren<ParticleSystem>()) {
+			ps.renderer.sortingLayerName = "Fx";
+			dur = Mathf.Max(dur, ps.duration);
+		}
+		yield return new WaitForSeconds(dur);
+		GameObject.Destroy(a);
 	}
 
 }

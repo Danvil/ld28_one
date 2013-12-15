@@ -15,11 +15,11 @@ public class Game : MonoBehaviour {
 		GameObject pgo = (GameObject)Instantiate(plPlayer);
 		Globals.player = pgo.GetComponentInChildren<Player>();
 		// set player
-		Globals.player.agent.HasKnive = true;
-		Globals.player.agent.HasJump = true;
-		Globals.player.agent.HasSpeed = true;
-		Globals.player.agent.HasCarry = true;
-		Globals.player.agent.HasRainbow = true;
+		Globals.player.agent.HasKnive = false;
+		Globals.player.agent.HasJump = false;
+		Globals.player.agent.HasSpeed = false;
+		Globals.player.agent.HasCarry = false;
+		Globals.player.agent.HasRainbow = false;
 		// generate level
 		LoadLevel(0);
 	}
