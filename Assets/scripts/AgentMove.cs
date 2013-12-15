@@ -4,7 +4,7 @@ using System.Collections;
 public class AgentMove : MonoBehaviour {
 	
 	static int jumpSupportLayerMask = (1<<8) + (1<<9) + (1<<10);
-	static float jumpSupportPoint = 0.55f;
+	static float jumpSupportRad = 0.05f;
 	
 	public float walkForce = 450.0f;
 	public float walkBreakForce = 250.0f;
@@ -46,13 +46,7 @@ public class AgentMove : MonoBehaviour {
 	public bool DoJump { get; set; }
 
 	bool TestForSupport() {
-		RaycastHit2D hit1 = Physics2D.Raycast(this.transform.position, -Vector2.up,
-		                                      jumpSupportPoint, jumpSupportLayerMask);
-		RaycastHit2D hit2 = Physics2D.Raycast(this.transform.position, -Vector2.up + Vector2.right,
-		                                      Mathf.Sqrt(2.0f)*jumpSupportPoint, jumpSupportLayerMask);
-		RaycastHit2D hit3 = Physics2D.Raycast(this.transform.position, -Vector2.up - Vector2.right,
-		                                      Mathf.Sqrt(2.0f)*jumpSupportPoint, jumpSupportLayerMask);
-		return hit1 || hit2 || hit3;
+		return Tools.ThreeRayTest2D((CircleCollider2D)this.collider2D, this.transform, -Vector2.up, jumpSupportRad, 0.73f, jumpSupportLayerMask);
 	}
 	
 	void FixedUpdate() {

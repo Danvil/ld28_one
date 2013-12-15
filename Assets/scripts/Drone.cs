@@ -25,41 +25,10 @@ public class Drone : MonoBehaviour {
 	}
 
 	bool CanMove(Vector2 m) {
-		const float SEC_STR = 0.43f;
-		Vector2 p = this.transform.position.XY() + this.transform.localScale.XY().CwMult(cc2.center);
-		float r = cc2.radius * 1.30f;
-		float rsec = r * Mathf.Sqrt(1.0f + SEC_STR*SEC_STR);
-		Vector2 mo = new Vector2(m.y, -m.x);
-		RaycastHit2D hit1 = Physics2D.Raycast(p, m.normalized, r, moveLayerMask);
-		RaycastHit2D hit2 = Physics2D.Raycast(p, (m + SEC_STR*mo).normalized, rsec, moveLayerMask);
-		RaycastHit2D hit3 = Physics2D.Raycast(p, (m - SEC_STR*mo).normalized, rsec, moveLayerMask);
-		Debug.DrawLine(p.XY0(), (p + r*m.normalized).XY0());
-		Debug.DrawLine(p.XY0(), (p + rsec*(m + SEC_STR*mo).normalized).XY0());
-		Debug.DrawLine(p.XY0(), (p + rsec*(m - SEC_STR*mo).normalized).XY0());
-		return !hit1 && !hit2 && !hit3;
+		return !Tools.ThreeRayTest2D(cc2, transform, m, 0.1f, 0.5f, moveLayerMask);
 	}
 	
 	void Update() {
-//		Vector2 dx = goal - this.transform.position.XY();
-//		float dxb = dx.magnitude;
-//		if(dxb < 0.1 /*|| (this.transform.position.y < minFlightHeight && dx.y < 0)*/) {
-//			SetRandomGoal();
-//		}
-//		else {
-//			// compute move
-//			Vector2 move = (Time.deltaTime*speed/dxb)*dx;
-//			// check if move possible
-//			if(CanMove(move)) {
-//				// move
-//				this.transform.position += move.XY0();
-//				// flip if necessary
-//				this.transform.localScale = new Vector3((dx.x < 0 ? -1 : +1), 1, 1);
-//			}
-//			else {
-//				// new goal
-//				SetRandomGoal();
-//			}
-//		}
 		if(needNewGoal) {
 			SetRandomGoal();
 			needNewGoal = false;
