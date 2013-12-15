@@ -13,6 +13,7 @@ public class LevelGenerator : MonoBehaviour
 	public UnityEngine.GameObject portal;
 
 	void Start() {
+		Globals.lvlGen = this;
 	}
 
 	void Update() {
@@ -53,9 +54,46 @@ public class LevelGenerator : MonoBehaviour
 			go.transform.localPosition = new Vector2(0.5f,1.0f);
 			return go;
 		}
-		else if(tt == TileType.PORTAL) {
+		else if(tt == TileType.PORTAL_0) {
 			GameObject go = (GameObject)Instantiate(portal);
 			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 0;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_1) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 1;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_2) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 2;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_3) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 3;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_4) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 4;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_5) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 5;
+			return go;
+		}
+		else if(tt == TileType.PORTAL_6) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 6;
 			return go;
 		}
 		else {
@@ -359,12 +397,12 @@ public class LevelGenerator : MonoBehaviour
 		// gamble for mandatory drop down
 		int xdrop, x1, x2;
 		if(goRight) {
-			xdrop = gotomax ? NW - 1 : Random.Range(x0, NW);
+			xdrop = gotomax ? NW - 1 : Random.Range(y == 0 ? x0+1 : x0, NW);
 			x1 = x0;
 			x2 = xdrop;
 		}
 		else {
-			xdrop = gotomax ? 0 : Random.Range(0, x0+1);
+			xdrop = gotomax ? 0 : Random.Range(y == 0 ? 1 : 0, x0);
 			x1 = xdrop;
 			x2 = x0;
 		}
@@ -470,10 +508,17 @@ public class LevelGenerator : MonoBehaviour
 		}
 
 		// choose random block in first row
-		int x0 = Random.Range(0, NW);
+		int x0 = Random.Range(1, NW-1);
 		int x0y0 = x0;
 		for(int y=0; y<NH; y++) {
-			x0 = BlockARow(blocks, x0, y, y==1);
+			x0 = BlockARow(blocks, x0, y, y != 0 && y != NH-1);
+		}
+		// do not drop in portal room
+		if((blocks[0,x0y0] & 4) > 0) {
+			blocks[0,x0y0] -= 4;
+			if(NH > 1) {
+				blocks[1,x0y0] -= 1;
+			}
 		}
 
 		// create blocks
@@ -492,12 +537,12 @@ public class LevelGenerator : MonoBehaviour
 		// place player
 		Place(lvl, x0y0,0, 3,6, TileType.PLAYER);
 
-		// place machine
-		Place(lvl, x0,NH-1, 8,6, TileType.MACHINE);
-
 		// place portal
-		Place(lvl, x0,NH-1, 2,6, TileType.PORTAL);
+		Place(lvl, x0y0,0, 4,6, TileType.PORTAL_0);
 		
+		// place machine
+		Place(lvl, x0,NH-1, 7,6, TileType.MACHINE);
+
 		return lvl;
 	}
 	
@@ -517,5 +562,54 @@ public class LevelGenerator : MonoBehaviour
 			}
 		}
 	}
+
+	static int Color32ToInt(Color32 col) {
+		return col.r + 256*col.g + 256*256*col.b;
+	}
+	
+	static int col_white = Color32ToInt(new Color32(255,255,255,255));
+	static int col_black = Color32ToInt(new Color32(0,0,0,255));
+	static int col_red = Color32ToInt(new Color32(255,0,0,255));
+	static int col_reddark = Color32ToInt(new Color32(128,0,0,255));
+	static int col_green = Color32ToInt(new Color32(0,255,0,255));
+	static int col_blue_0 = Color32ToInt(new Color32(0,0,255,255));
+	static int col_blue_1 = Color32ToInt(new Color32(1,0,255,255));
+	static int col_blue_2 = Color32ToInt(new Color32(2,0,255,255));
+	static int col_blue_3 = Color32ToInt(new Color32(3,0,255,255));
+	static int col_blue_4 = Color32ToInt(new Color32(4,0,255,255));
+	static int col_blue_5 = Color32ToInt(new Color32(5,0,255,255));
+	static int col_blue_6 = Color32ToInt(new Color32(6,0,255,255));
+
+	static TileType Color32ToValue(Color32 col) {
+		int ic = Color32ToInt(col);
+		if(ic == col_white) return TileType.NONE;
+		if(ic == col_black) return TileType.WALL;
+		if(ic == col_red) return TileType.AGENT;
+		if(ic == col_reddark) return TileType.DRONE;
+		if(ic == col_green) return TileType.PLAYER;
+		if(ic == col_blue_0) return TileType.PORTAL_0;
+		if(ic == col_blue_1) return TileType.PORTAL_1;
+		if(ic == col_blue_2) return TileType.PORTAL_2;
+		if(ic == col_blue_3) return TileType.PORTAL_3;
+		if(ic == col_blue_4) return TileType.PORTAL_4;
+		if(ic == col_blue_5) return TileType.PORTAL_5;
+		if(ic == col_blue_6) return TileType.PORTAL_6;
+		return TileType.UNKNOWN;
+	}
+	
+	public Level CreateLevelFromTex(Texture2D tex) {
+		// convert color to game data
+		int width = tex.width;
+		int height = tex.height;
+		Color32[] pixels = tex.GetPixels32();
+		Level level = new Level(width, height);
+		for(int y=0; y<height; y++) {
+			for(int x=0; x<width; x++) {
+				level.tiles[y,x] = Color32ToValue(pixels[x+y*width]);
+			}
+		}
+		return level;
+	}
+
 
 }

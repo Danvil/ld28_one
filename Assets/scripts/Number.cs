@@ -12,7 +12,13 @@ public class Number : MonoBehaviour {
 		}
 		set {
 			number = value;
-			((SpriteRenderer)this.renderer).sprite = sprites[number-1];
+			if(1 <= number && number <= 9) {
+				this.renderer.enabled = true;
+				((SpriteRenderer)this.renderer).sprite = sprites[number-1];
+			}
+			else {
+				this.renderer.enabled = false;
+			}
 		}
 	}
 

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour {
 		agent.move.DoJump = Input.GetButton("Jump");
 		agent.carry.DoThrow = false;
 		agent.carry.DoPickUp = false;
-		if(Input.GetButton("Fire2")) {
+		if(Input.GetButton("Fire3")) {
 			if(agent.carry.IsCarrying)
 				agent.carry.DoThrow = true;
 			else 
