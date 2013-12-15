@@ -13,10 +13,12 @@ public class Drone : MonoBehaviour {
 
 	Vector2 goal;
 
+	Animator animator;
 	CircleCollider2D cc2;
 	AgentHealth ah;
 
 	void Start() {
+		animator = GetComponent<Animator>();
 		cc2 = (CircleCollider2D)this.collider2D;
 		ah = GetComponent<AgentHealth>();
 		goal = Home;
@@ -31,6 +33,7 @@ public class Drone : MonoBehaviour {
 	}
 	
 	void Update() {
+		animator.SetBool("dead",  ah.IsDead);
 		if(ah.IsDead) return;
 		if(needNewGoal) {
 			SetRandomGoal();

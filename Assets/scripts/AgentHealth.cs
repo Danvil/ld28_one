@@ -43,9 +43,9 @@ public class AgentHealth : MonoBehaviour {
 		// make unmovable
 		this.rigidbody2D.isKinematic = false;
 		this.rigidbody2D.gravityScale = 1.0f;
-		if(!IsPlayer) {
-			StartCoroutine(DestroyMe());
-		}
+//		if(!IsPlayer) {
+//			StartCoroutine(DestroyMe());
+//		}
 	}
 
 	IEnumerator FireDeathExplosion() {

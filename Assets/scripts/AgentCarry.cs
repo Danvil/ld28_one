@@ -78,9 +78,10 @@ public class AgentCarry : MonoBehaviour {
 	void FixedUpdate() {
 		if(IsCarrying) {
 			carry.transform.position = this.transform.position + 1.3f * Vector2.up.XY0();
-			float sx = carry.transform.localScale.x;
-			float sy = carry.transform.localScale.y;
-			carry.transform.localScale = new Vector3(Mathf.Sign(sx), Mathf.Sign(sy));
+			// should fix a bug but doesnt
+//			float sx = carry.transform.localScale.x;
+//			float sy = carry.transform.localScale.y;
+//			carry.transform.localScale = new Vector3(Mathf.Sign(sx), Mathf.Sign(sy));
 		}
 	}
 }
