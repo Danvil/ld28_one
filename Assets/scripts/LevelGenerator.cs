@@ -238,6 +238,87 @@ public class LevelGenerator : MonoBehaviour
 		}
 	}
 
+	void FillBlock(Level lvl, int bx, int by, int type) {
+		const int NUM = 4;
+		int[,] fill = new int[NUM,BH*BW]
+		{
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,1,1,1,1,0,0,0,1,
+				1,0,0,0,1,1,1,1,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,1,1,1,0,0,0,0,1,
+				1,0,0,0,1,1,1,0,0,0,0,1,
+				1,0,0,0,1,1,1,1,1,0,0,1,
+				1,0,0,0,1,1,1,1,1,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,1,1,0,0,0,0,0,0,1,
+				1,0,0,1,1,0,0,0,0,0,0,1,
+				1,0,0,1,1,1,1,1,0,0,0,1,
+				1,0,0,1,1,1,1,1,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			}
+		};
+		// select filling
+		int fi = Random.Range(0, NUM);
+		// place filling
+		for(int y=1; y<BH-1; y++) {
+			for(int x=1; x<BW-1; x++) {
+				TileType tt = (fill[fi,x+y*BW] == 1) ? TileType.WALL : TileType.NONE;
+				Place(lvl, bx, by, x, y, tt);
+			}
+		}
+		// assert room connectivity
+		if((type & 1) > 0) {
+			// assert top access => delete y=1 and y=2
+			SetBlock(lvl, bx, by, 1,BW-1, 1,3, TileType.NONE);
+		}
+		if((type & 2) > 0) {
+			// assert right access => delete x=9 and x=10
+			SetBlock(lvl, bx, by, 9,11, 1,BH-1, TileType.NONE);
+		}
+		if((type & 4) > 0) {
+			// assert bottom access => delete y=5 and y=6
+			SetBlock(lvl, bx, by, 1,BW-1, 5,7, TileType.NONE);
+		}
+		if((type & 8) > 0) {
+			// assert left access => delete x=1 and x=2
+			SetBlock(lvl, bx, by, 1,3, 1,BH-1, TileType.NONE);
+		}
+	}
+
+	void SetBlock(Level lvl, int bx, int by, int x1, int x2, int y1, int y2, TileType tt) {
+		for(int y=y1; y<y2; y++) {
+			for(int x=x1; x<x2; x++) {
+				Place(lvl, bx, by, x, y, tt);
+			}
+		}
+	}
+	
 	void Place(Level lvl, int bx, int by, int x, int y, TileType tt) {
 		lvl.tiles[BH*NH-1-(by*BH+y),bx*BW+x] = tt;
 	}
@@ -304,6 +385,10 @@ public class LevelGenerator : MonoBehaviour
 		for(int y=0; y<NH; y++) {
 			for(int x=0; x<NW; x++) {
 				CreateBlock(lvl, x, y, blocks[y,x]);
+				if(!(y == NH-1 && x == x0) && !(y == 0 && x == x0y0)) {
+					// do not fill start and goal
+					FillBlock(lvl, x, y, blocks[y,x]);
+				}
 			}
 		}
 
