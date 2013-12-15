@@ -10,4 +10,8 @@ static public class Tools
 		return new Vector3(v.x, v.y, 0);
 	}
 
+	static public Vector2 CwMult(this Vector2 a, Vector2 b) {
+		return new Vector2(a.x * b.x, a.y * b.y);
+	}
+
 }
