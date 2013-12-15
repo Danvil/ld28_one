@@ -16,6 +16,7 @@ public enum TileType
 	PORTAL_4,
 	PORTAL_5,
 	PORTAL_6,
+	PORTAL_7,
 	UNKNOWN
 }
 

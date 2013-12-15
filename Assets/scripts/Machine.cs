@@ -25,21 +25,23 @@ public class Machine : MonoBehaviour {
 		const float MSG_DUR = 1.76f;
 		string[] msgs = {
 			"#1: For loosers only",
-			"#2: Secret ninja skills!",
+			"#2: Strength of a mountain",
 			"#3: Jump high into the sky!",
-			"#4: Fast as lightning",
-			"#5: Strength of a mountain",
-			"#6: Glamor!"
+			"#4: Secret ninja skills!",
+			"#5: Fast as lightning",
+			"#6: Glamor!",
+			"#7: Ultimate Power!",
 		};
 		Globals.messages.Show(msgs[num-1], MSG_DUR);
 		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
 		string[] answer = {
 			"\"I can't stand it anymore!\"",
-			"\"They will tast my steel.\"",
-			"\"No one can keep my down!\"",
-			"\"The hand is faster than the eye.\"",
 			"\"Nothing can stop me now!\"",
-			"\"Let them eat cake\""
+			"\"No one can keep my down!\"",
+			"\"They will taste my steel.\"",
+			"\"The hand is faster than the eye.\"",
+			"\"Let them eat cake\"",
+			"\"The force is strong with this one\""
 		};
 		Globals.messages.Show(answer[num-1], MSG_DUR);
 	}
@@ -58,19 +60,22 @@ public class Machine : MonoBehaviour {
 				Globals.player.agent.HasDump = true;
 				break;
 			case 2:
-				Globals.player.agent.HasKnive = true;
+				Globals.player.agent.HasCarry = true;
 				break;
 			case 3:
 				Globals.player.agent.HasJump = true;
 				break;
 			case 4:
-				Globals.player.agent.HasSpeed = true;
+				Globals.player.agent.HasKnive = true;
 				break;
 			case 5:
-				Globals.player.agent.HasCarry = true;
+				Globals.player.agent.HasSpeed = true;
 				break;
 			case 6:
 				Globals.player.agent.HasRainbow = true;
+				break;
+			case 7:
+				Globals.player.agent.HasUltimate = true;
 				break;
 			default: break;
 			}

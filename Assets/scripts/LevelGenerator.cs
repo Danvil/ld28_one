@@ -103,6 +103,12 @@ public class LevelGenerator : MonoBehaviour
 			go.GetComponent<Portal>().level = 6;
 			return go;
 		}
+		else if(tt == TileType.PORTAL_7) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
+			go.GetComponent<Portal>().level = 7;
+			return go;
+		}
 		else {
 			return null;
 		}
@@ -132,8 +138,8 @@ public class LevelGenerator : MonoBehaviour
 	int NW { get { return parameters.nw; } }
 	int NH { get { return parameters.nh; } }
 
-	const float DROP_PROP = 0.3f;
-	const float FROP_PROP = 0.3f;
+	const float DROP_PROP = 0.2f;
+	const float FROP_PROP = 0.1f;
 
 	float AGENT_PROP { get { return parameters.agentProp; } }
 	float DRONE_PROP { get { return parameters.droneProp; } }
@@ -608,6 +614,7 @@ public class LevelGenerator : MonoBehaviour
 	static int col_blue_4 = Color32ToInt(new Color32(4,0,255,255));
 	static int col_blue_5 = Color32ToInt(new Color32(5,0,255,255));
 	static int col_blue_6 = Color32ToInt(new Color32(6,0,255,255));
+	static int col_blue_7 = Color32ToInt(new Color32(7,0,255,255));
 
 	static TileType Color32ToValue(Color32 col) {
 		int ic = Color32ToInt(col);
@@ -623,6 +630,7 @@ public class LevelGenerator : MonoBehaviour
 		if(ic == col_blue_4) return TileType.PORTAL_4;
 		if(ic == col_blue_5) return TileType.PORTAL_5;
 		if(ic == col_blue_6) return TileType.PORTAL_6;
+		if(ic == col_blue_7) return TileType.PORTAL_7;
 		return TileType.UNKNOWN;
 	}
 	

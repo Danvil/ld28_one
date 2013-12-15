@@ -15,12 +15,23 @@ public class Game : MonoBehaviour {
 	}
 
 	bool showedGameOverMessage;
-	
+	bool showedGameWonMessage;
+
 	void Update() {
 		if(Globals.player.agent.health.IsDead) {
 			if(!showedGameOverMessage) {
 				StartCoroutine(ShowGameOver());
 				showedGameOverMessage = true;
+			}
+			if(Input.GetButton("Fire2")) {
+				// restert
+				RestartGame();
+			}
+		}
+		if(Globals.player.agent.HasUltimate) {
+			if(!showedGameWonMessage) {
+				StartCoroutine(ShowGameWon());
+				showedGameWonMessage = true;
 			}
 			if(Input.GetButton("Fire2")) {
 				// restert
@@ -37,6 +48,7 @@ public class Game : MonoBehaviour {
 
 	void StartGame() {
 		showedGameOverMessage = false;
+		showedGameWonMessage = false;
 		// generate player
 		GameObject pgo = (GameObject)Instantiate(plPlayer);
 		Globals.player = pgo.GetComponentInChildren<Player>();
@@ -46,6 +58,7 @@ public class Game : MonoBehaviour {
 		Globals.player.agent.HasSpeed = false;
 		Globals.player.agent.HasCarry = false;
 		Globals.player.agent.HasRainbow = false;
+		Globals.player.agent.HasUltimate = false;
 		// generate level
 		LoadLevel(0);
 	}
@@ -56,6 +69,13 @@ public class Game : MonoBehaviour {
 		Globals.messages.Show("Press 'l' to restart", 100000);
 	}
 
+	IEnumerator ShowGameWon() {
+		yield return new WaitForSeconds(9.0f);
+		Globals.messages.Show("You gained ultimate power!\nGame Won", 1);
+		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+		Globals.messages.Show("Press 'l' to play anew", 100000);
+	}
+	
 	void DestroyLevel() {
 		GameObject old_level_go = GameObject.Find("Level");
 		Destroy(old_level_go);
@@ -93,7 +113,7 @@ public class Game : MonoBehaviour {
 			// get dumb
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 3, nh = 1,
-				droneProp = 0.0f, agentProp = 0.05f
+				droneProp = 0.00f, agentProp = 0.04f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}
@@ -101,7 +121,7 @@ public class Game : MonoBehaviour {
 			// find knive
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 4, nh = 2,
-				droneProp = 0.0f, agentProp = 0.05f
+				droneProp = 0.00f, agentProp = 0.07f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}
@@ -109,7 +129,7 @@ public class Game : MonoBehaviour {
 			// get speed
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 4, nh = 3,
-				droneProp = 0.0f, agentProp = 0.15f
+				droneProp = 0.004f, agentProp = 0.09f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}
@@ -117,7 +137,7 @@ public class Game : MonoBehaviour {
 			// get jump
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 8, nh = 2,
-				droneProp = 0.01f, agentProp = 0.15f
+				droneProp = 0.006f, agentProp = 0.11f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}
@@ -125,15 +145,23 @@ public class Game : MonoBehaviour {
 			// get throw
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 4, nh = 3,
-				droneProp = 0.01f, agentProp = 0.15f
+				droneProp = 0.008f, agentProp = 0.14f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}
 		else if(i == 6) {
 			// get glamor
 			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
+				nw = 6, nh = 4,
+				droneProp = 0.010f, agentProp = 0.17f
+			};
+			return Globals.lvlGen.CreateRandomLevel(par);
+		}
+		else if(i == 7) {
+			// get glamor
+			LevelGenerator.Parameters par = new LevelGenerator.Parameters() {
 				nw = 7, nh = 5,
-				droneProp = 0.01f, agentProp = 0.15f
+				droneProp = 0.012f, agentProp = 0.15f
 			};
 			return Globals.lvlGen.CreateRandomLevel(par);
 		}

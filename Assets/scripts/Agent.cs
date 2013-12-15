@@ -43,6 +43,10 @@ public class Agent : MonoBehaviour {
 		set { }
 	}
 
+	public bool HasUltimate {
+		get; set;
+	}
+	
 	void Awake() {
 		animator = GetComponent<Animator>();
 		move = GetComponent<AgentMove>();
