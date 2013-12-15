@@ -4,20 +4,24 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
 	public Texture2D defLevelTex;
-	
+	public UnityEngine.GameObject plPlayer;
+
 	void Awake() {
 		Globals.game = this;
 	}
 
 	void Start() {
+		// generate player
+		GameObject pgo = (GameObject)Instantiate(plPlayer);
+		Globals.player = pgo.GetComponentInChildren<Player>();
+		// set player
+		Globals.player.agent.HasKnive = true;
+		Globals.player.agent.HasJump = true;
+		Globals.player.agent.HasSpeed = true;
+		Globals.player.agent.HasCarry = true;
+		Globals.player.agent.HasRainbow = true;
 		// generate level
 		LoadLevel(0);
-		// set player
-		Globals.player.agent.HasKnive = false;
-		Globals.player.agent.HasJump = false;
-		Globals.player.agent.HasSpeed = false;
-		Globals.player.agent.HasCarry = false;
-		Globals.player.agent.HasRainbow = false;
 	}
 	
 	void Update() {
@@ -27,19 +31,22 @@ public class Game : MonoBehaviour {
 	public void LoadLevel(int i) {
 		// go through portal
 		// delete current level
-		GameObject now = GameObject.Find("Level");
-		Destroy(now);
+		GameObject old_level_go = GameObject.Find("Level");
+		Destroy(old_level_go);
 		// create new
 		Level lvl = CreateLevel(i);
 		Globals.lvlGen.CreateGameobjects(lvl);
-		// TODO somehow transfer player info
-		// correct player position
-		// find correct portal
-		Portal[] portals = GameObject.FindObjectsOfType<Portal>();
-		foreach(Portal p in portals) {
+		// set player position by finding correct portal
+		foreach(Portal p in GameObject.FindObjectsOfType<Portal>()) {
 			if(p.level == Globals.levelId) {
 				Globals.player.transform.position = p.transform.position;
 				break;
+			}
+		}
+		if(i != 0) {
+			// set machine id
+			foreach(Machine m in GameObject.FindObjectsOfType<Machine>()) {
+				m.num = i;
 			}
 		}
 		// go through

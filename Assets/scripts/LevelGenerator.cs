@@ -6,7 +6,7 @@ public class LevelGenerator : MonoBehaviour
 
 	public UnityEngine.GameObject tile;
 	public UnityEngine.GameObject tileNC;
-	public UnityEngine.GameObject player;
+//	public UnityEngine.GameObject player;
 	public UnityEngine.GameObject agent;
 	public UnityEngine.GameObject drone;
 	public UnityEngine.GameObject machine;
@@ -38,7 +38,11 @@ public class LevelGenerator : MonoBehaviour
 			return go;
 		}
 		else if(tt == TileType.PLAYER) {
-			return (GameObject)Instantiate(player);
+			//return (GameObject)Instantiate(player);
+			if(Globals.player != null) {
+				Globals.player.transform.position = new Vector3(x,y,0);
+			}
+			return null;
 		}
 		else if(tt == TileType.AGENT) {
 			GameObject go = (GameObject)Instantiate(agent);

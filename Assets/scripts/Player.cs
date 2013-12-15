@@ -6,7 +6,6 @@ public class Player : MonoBehaviour {
 	public Agent agent;
 	
 	void Awake() {
-		Globals.player = this;
 		agent = GetComponent<Agent>();
 	}
 
