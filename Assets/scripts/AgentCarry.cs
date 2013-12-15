@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AgentCarry : MonoBehaviour {
 
-	static int PICK_LAYER_MASK = (1<<8) + (1<<9) + (1<<10);
+	int PICK_LAYER_MASK;
 
 	public float throwForce = 200.0f;
 
@@ -24,6 +24,12 @@ public class AgentCarry : MonoBehaviour {
 	}
 
 	void Start() {
+		PICK_LAYER_MASK =
+				(1<<LayerMask.NameToLayer("Wall")) +
+				(1<<LayerMask.NameToLayer("Objects")) +
+				(1<<LayerMask.NameToLayer("Agents")) +
+				(1<<LayerMask.NameToLayer("Player"));
+
 		DoPickUp = false;
 		DoThrow = false;
 		carry = null;
@@ -65,6 +71,8 @@ public class AgentCarry : MonoBehaviour {
 		carry = hit.transform.gameObject;
 		carry.rigidbody2D.isKinematic = true;
 		carry.transform.parent = this.transform;
+		if(carry.renderer.sortingLayerName == "Wall")
+			carry.renderer.sortingLayerName = "Objects";
 	}
 	
 	void PerformThrow(float forceAmount) {

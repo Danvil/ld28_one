@@ -26,16 +26,16 @@ public class AgentSlice : MonoBehaviour {
 			agent.animator.SetTrigger("slice");
 			DoAttack = false;
 			nextAttack = attackRate;
-			Agent target = FindAttackTarget();
+			AgentHealth target = FindAttackTarget();
 			if(target != null) {
-				target.health.Health -= 2.0f;
+				target.Health -= 2.0f;
 				Vector2 pos = 0.5f*(target.transform.position.XY() + this.transform.position.XY());
 				StartCoroutine(CreateSlicePf(pos));
 			}
 		}
 	}
 
-	Agent FindAttackTarget() {
+	AgentHealth FindAttackTarget() {
 		// what direction are we looking at?
 		float dir = this.transform.localScale.x;
 		// find object
@@ -44,7 +44,7 @@ public class AgentSlice : MonoBehaviour {
 			return null;
 		}
 		// check if agent
-		return hit.rigidbody.gameObject.GetComponent<Agent>();
+		return hit.rigidbody.gameObject.GetComponent<AgentHealth>();
 	}
 	
 	IEnumerator CreateSlicePf(Vector2 pos) {
