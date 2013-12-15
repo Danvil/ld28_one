@@ -69,6 +69,8 @@ public class LevelGenerator : MonoBehaviour
 	const int NH = 3;
 	const float DROP_PROP = 0.3f;
 	const float FROP_PROP = 0.3f;
+	const float AGENT_PROP = 0.15f;
+	const float DRONE_PROP = 0.01f;
 
 	// top: 1, right: 2, bottom: 4, left: 8
 	// 0 = not initialized
@@ -302,32 +304,28 @@ public class LevelGenerator : MonoBehaviour
 		// assert room connectivity
 		if((type & 1) > 0) {
 			// assert top access => delete y=1 and y=2
-			SetBlock(lvl, bx, by, 1,BW-1, 1,3, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,BW-1, 1,3, TileType.NONE);
 		}
 		if((type & 2) > 0) {
 			// assert right access => delete x=9 and x=10
-			SetBlock(lvl, bx, by, 9,11, 1,BH-1, TileType.NONE);
+			FillRegion(lvl, bx, by, 9,11, 1,BH-1, TileType.NONE);
 		}
 		if((type & 4) > 0) {
 			// assert bottom access => delete y=5 and y=6
-			SetBlock(lvl, bx, by, 1,BW-1, 5,7, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,BW-1, 5,7, TileType.NONE);
 		}
 		if((type & 8) > 0) {
 			// assert left access => delete x=1 and x=2
-			SetBlock(lvl, bx, by, 1,3, 1,BH-1, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,3, 1,BH-1, TileType.NONE);
 		}
 	}
 
-	void SetBlock(Level lvl, int bx, int by, int x1, int x2, int y1, int y2, TileType tt) {
+	void FillRegion(Level lvl, int bx, int by, int x1, int x2, int y1, int y2, TileType tt) {
 		for(int y=y1; y<y2; y++) {
 			for(int x=x1; x<x2; x++) {
 				Place(lvl, bx, by, x, y, tt);
 			}
 		}
-	}
-	
-	void Place(Level lvl, int bx, int by, int x, int y, TileType tt) {
-		lvl.tiles[BH*NH-1-(by*BH+y),bx*BW+x] = tt;
 	}
 	
 	int BlockARow(int[,] blocks, int x0, int y, bool gotomax) {
@@ -371,6 +369,71 @@ public class LevelGenerator : MonoBehaviour
 		return xdrop;
 	}
 
+	void Place(Level lvl, int bx, int by, int x, int y, TileType tt) {
+		lvl.tiles[BH*NH-1-(by*BH+y),bx*BW+x] = tt;
+	}
+	
+	TileType LvlGet(Level lvl, int bx, int by, int x, int y) {
+		return lvl.tiles[BH*NH-1-(by*BH+y),bx*BW+x];
+	}
+
+	bool IsFree(Level lvl, int bx, int by, int x, int y) {
+		if(0 <= x && x < BW && 0 <= y && y < BH) {
+			return LvlGet(lvl, bx, by, x, y) == TileType.NONE;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	bool IsSupport(Level lvl, int bx, int by, int x, int y) {
+		if(0 <= x && x < BW && 0 <= y && y < BH) {
+			return LvlGet(lvl, bx, by, x, y) == TileType.WALL;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	void PopulateBlock(Level lvl, int bx, int by) {
+		// place agents
+		// candidate field: filled below, free above
+		for(int y=0; y<BH; y++) {
+			for(int x=0; x<BW; x++) {
+				// check if free
+				if(IsFree(lvl,bx,by,x,y)
+				   && IsFree(lvl,bx,by,x,y-1)
+				   && IsSupport(lvl,bx,by,x,y+1)
+				){
+					// gamble
+					if(Random.value < AGENT_PROP)
+						Place(lvl, bx, by, x, y, TileType.AGENT);
+				}
+			}
+		}
+		// place drones
+		// candidate field: minimum height, free around
+		for(int y=0; y<BH/2; y++) {
+			for(int x=0; x<BW; x++) {
+				// check if free
+				if(   IsFree(lvl,bx,by,x  ,y-1)
+				   && IsFree(lvl,bx,by,x  ,y  )
+				   && IsFree(lvl,bx,by,x  ,y+1)
+				   && IsFree(lvl,bx,by,x+1,y-1)
+				   && IsFree(lvl,bx,by,x+1,y  )
+				   && IsFree(lvl,bx,by,x+1,y+1)
+				   && IsFree(lvl,bx,by,x-1,y-1)
+				   && IsFree(lvl,bx,by,x-1,y  )
+				   && IsFree(lvl,bx,by,x-1,y+1)
+				   ){
+					// gamble
+					if(Random.value < DROP_PROP)
+						Place(lvl, bx, by, x, y, TileType.DRONE);
+				}
+			}
+		}
+	}
+	
 	public Level CreateRandomLevel() {
 		// init blocks
 		int[,] blocks = new int[NH,NW];
@@ -395,6 +458,7 @@ public class LevelGenerator : MonoBehaviour
 				if(!(y == NH-1 && x == x0) && !(y == 0 && x == x0y0)) {
 					// do not fill start and goal
 					FillBlock(lvl, x, y, blocks[y,x]);
+					PopulateBlock(lvl, x, y);
 				}
 			}
 		}

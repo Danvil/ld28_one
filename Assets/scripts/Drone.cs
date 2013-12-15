@@ -21,7 +21,7 @@ public class Drone : MonoBehaviour {
 	void Update() {
 		Vector2 dx = goal - this.transform.position.XY();
 		float dxb = dx.magnitude;
-		if(dxb < 0.1 || (this.transform.position.y < minFlightHeight && dx.y < 0)) {
+		if(dxb < 0.1 /*|| (this.transform.position.y < minFlightHeight && dx.y < 0)*/) {
 			SetRandomGoal();
 		}
 		else {
