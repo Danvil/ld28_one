@@ -14,9 +14,11 @@ public class Drone : MonoBehaviour {
 	Vector2 goal;
 
 	CircleCollider2D cc2;
+	AgentHealth ah;
 
 	void Start() {
 		cc2 = (CircleCollider2D)this.collider2D;
+		ah = GetComponent<AgentHealth>();
 		goal = Home;
 	}
 
@@ -29,6 +31,7 @@ public class Drone : MonoBehaviour {
 	}
 	
 	void Update() {
+		if(ah.IsDead) return;
 		if(needNewGoal) {
 			SetRandomGoal();
 			needNewGoal = false;
@@ -38,6 +41,7 @@ public class Drone : MonoBehaviour {
 	bool needNewGoal = false;
 
 	void FixedUpdate() {
+		if(ah.IsDead) return;
 		Vector2 dx = goal - this.transform.position.XY();
 		float dxb = dx.magnitude;
 		if(dxb < 0.1) {

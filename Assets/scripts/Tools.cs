@@ -31,4 +31,9 @@ static public class Tools
 		return hit1 || hit2 || hit3;
 	}
 
+	static public RaycastHit2D PickNeighbour(CircleCollider2D cc2, Transform t, Vector2 dir, float rad, int mask) {
+		Vector2 p = t.position.XY() + t.localScale.XY().CwMult(cc2.center);
+		return Physics2D.Raycast(p + cc2.radius*1.05f*dir, dir, rad, mask);
+	}
+
 }

@@ -18,9 +18,11 @@ public class AgentMove : MonoBehaviour {
 	bool hasSupport = false;
 	
 	private Animator animator;
-	
+	AgentHealth ah;
+
 	void Start() {
 		animator = GetComponent<Animator>();
+		ah = GetComponent<AgentHealth>();
 	}
 	
 	void Update() {
@@ -50,6 +52,13 @@ public class AgentMove : MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
+		if(ah.IsDead) {
+			animator.SetBool("dead",  true);
+			return;
+		}
+		else {
+			animator.SetBool("dead",  false);
+		}
 		float vx = rigidbody2D.velocity.x;
 		float vy = rigidbody2D.velocity.y;
 		Vector3 force = Vector3.zero;
@@ -65,7 +74,7 @@ public class AgentMove : MonoBehaviour {
 			walkIsFlipped = (dx < 0);
 		}
 		else {
-			float ax = -vx*walkBreakForce;
+			float ax = -Mathf.Sign(vx)*walkBreakForce;
 			if(!hasSupport) {
 				ax *= walkAirPercent;
 			}
@@ -85,7 +94,7 @@ public class AgentMove : MonoBehaviour {
 		if(Mathf.Abs(vx) > walkSpeedMax) {
 			rigidbody2D.velocity = new Vector2(Mathf.Sign(rigidbody2D.velocity.x)*walkSpeedMax, rigidbody2D.velocity.y);
 		}
-		animator.SetBool("walk",  hasSupport && Mathf.Abs(vx) > 0); // moving left/right
+		animator.SetBool("walk",  hasSupport && Mathf.Abs(vx) > 0.3); // moving left/right
 		animator.SetBool("fall", !hasSupport && vy < 0); // moving down
 		animator.SetBool("jump", !hasSupport && vy > 0); // moving up
 	}
