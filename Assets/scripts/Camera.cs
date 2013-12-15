@@ -13,7 +13,7 @@ public class Camera : MonoBehaviour {
 	
 	void Update() {
 		float x = Globals.player.transform.position.x;
-		float y = this.transform.position.y;
+		float y = Globals.player.transform.position.y;
 		float z = this.transform.position.z;
 		this.transform.position = new Vector3(x,y,z);
 	}

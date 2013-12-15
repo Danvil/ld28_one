@@ -6,12 +6,13 @@ public class AgentMove : MonoBehaviour {
 	static int jumpSupportLayerMask = (1<<8) + (1<<9) + (1<<10);
 	static float jumpSupportPoint = 0.55f;
 	
-	public float walkForce = 250.0f;
-	public float walkSpeedMax = 5.0f;
+	public float walkForce = 450.0f;
+	public float walkBreakForce = 250.0f;
+	public float walkSpeedMax = 6.0f;
 	bool walkIsFlipped = false;
-	public float walkAirPercent = 0.4f;
+	public float walkAirPercent = 0.1f;
 	
-	public float jumpForce = 5000;	
+	public float jumpForce = 3500;	
 	public float jumpRate = 0.5f;
 	private float nextJump = 0.0f;
 	bool hasSupport = false;
@@ -55,6 +56,8 @@ public class AgentMove : MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
+		float vx = rigidbody2D.velocity.x;
+		float vy = rigidbody2D.velocity.y;
 		Vector3 force = Vector3.zero;
 		// check if agent is supported from below
 		hasSupport = TestForSupport();
@@ -67,6 +70,13 @@ public class AgentMove : MonoBehaviour {
 			force += new Vector3(dx, 0, 0);
 			walkIsFlipped = (dx < 0);
 		}
+		else {
+			float ax = -vx*walkBreakForce;
+			if(!hasSupport) {
+				ax *= walkAirPercent;
+			}
+			force += new Vector3(ax, 0, 0);
+		}
 		// flip if necessary
 		this.transform.localScale = new Vector3((walkIsFlipped ? -1 : +1), 1, 1);
 		// jump
@@ -78,8 +88,6 @@ public class AgentMove : MonoBehaviour {
 		// apply
 		rigidbody2D.AddForce(force);
 		// limit speed for horizontal movement
-		float vx = rigidbody2D.velocity.x;
-		float vy = rigidbody2D.velocity.y;
 		if(Mathf.Abs(vx) > walkSpeedMax) {
 			rigidbody2D.velocity = new Vector2(Mathf.Sign(rigidbody2D.velocity.x)*walkSpeedMax, rigidbody2D.velocity.y);
 		}
