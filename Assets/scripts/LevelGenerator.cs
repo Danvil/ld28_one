@@ -12,8 +12,11 @@ public class LevelGenerator : MonoBehaviour
 	public UnityEngine.GameObject machine;
 	public UnityEngine.GameObject portal;
 
-	void Start() {
+	void Awake() {
 		Globals.lvlGen = this;
+	}
+
+	void Start() {
 	}
 
 	void Update() {

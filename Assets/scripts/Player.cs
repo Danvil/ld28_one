@@ -3,19 +3,20 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	Agent agent;
-
+	public Agent agent;
+	
 	void Awake() {
 		Globals.player = this;
+		agent = GetComponent<Agent>();
 	}
 
 	void Start() {
-		agent = GetComponent<Agent>();
 	}
 	
 	void Update() {
 		agent.move.MoveDx = Input.GetAxis("Horizontal");
 		agent.move.DoJump = Input.GetButton("Jump");
+		agent.move.UseRun = Input.GetKey(KeyCode.LeftShift);
 		agent.carry.DoThrow = false;
 		agent.carry.DoPickUp = false;
 		if(Input.GetButton("Fire3")) {
