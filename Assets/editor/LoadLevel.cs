@@ -32,6 +32,7 @@ public class LoadLevel : EditorWindow
 	static int col_red = Color32ToInt(new Color32(255,0,0,255));
 	static int col_reddark = Color32ToInt(new Color32(128,0,0,255));
 	static int col_green = Color32ToInt(new Color32(0,255,0,255));
+	static int col_blue = Color32ToInt(new Color32(0,0,255,255));
 
 	static TileType Color32ToValue(Color32 col) {
 		int ic = Color32ToInt(col);
@@ -40,6 +41,7 @@ public class LoadLevel : EditorWindow
 		if(ic == col_red) return TileType.AGENT;
 		if(ic == col_reddark) return TileType.DRONE;
 		if(ic == col_green) return TileType.PLAYER;
+		if(ic == col_blue) return TileType.PORTAL;
 		return TileType.UNKNOWN;
 	}
 

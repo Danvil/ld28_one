@@ -9,6 +9,7 @@ public enum TileType
 	AGENT,
 	DRONE,
 	MACHINE,
+	PORTAL,
 	UNKNOWN
 }
 

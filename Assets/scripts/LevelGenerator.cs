@@ -10,6 +10,7 @@ public class LevelGenerator : MonoBehaviour
 	public UnityEngine.GameObject agent;
 	public UnityEngine.GameObject drone;
 	public UnityEngine.GameObject machine;
+	public UnityEngine.GameObject portal;
 
 	void Start() {
 	}
@@ -49,6 +50,12 @@ public class LevelGenerator : MonoBehaviour
 		}
 		else if(tt == TileType.MACHINE) {
 			GameObject go = (GameObject)Instantiate(machine);
+			go.transform.localPosition = new Vector2(0.5f,1.0f);
+			return go;
+		}
+		else if(tt == TileType.PORTAL) {
+			GameObject go = (GameObject)Instantiate(portal);
+			go.transform.localPosition = new Vector2(2.0f,2.0f);
 			return go;
 		}
 		else {
@@ -343,7 +350,7 @@ public class LevelGenerator : MonoBehaviour
 				v += 2;
 			if(x-1 >= x1)
 				v += 8;
-			if((y < NH-1 && x == xdrop) || (Random.value < DROP_PROP)) {
+			if(y < NH-1 && (x == xdrop || Random.value < DROP_PROP)) {
 				v += 4;
 			}
 			blocks[y,x] = v;
@@ -354,7 +361,7 @@ public class LevelGenerator : MonoBehaviour
 					blocks[y,x] += 1;
 				}
 				else {
-					if(Random.value < DROP_PROP) {
+					if(Random.value < FROP_PROP) {
 						blocks[y,x] += 1;
 						blocks[y-1,x] += 4;
 					}
@@ -393,11 +400,14 @@ public class LevelGenerator : MonoBehaviour
 		}
 
 		// place player
-		Place(lvl, x0y0,0, 3,5, TileType.PLAYER);
+		Place(lvl, x0y0,0, 3,6, TileType.PLAYER);
 
 		// place machine
-		Place(lvl, x0,NH-1, 6,5, TileType.MACHINE);
+		Place(lvl, x0,NH-1, 8,6, TileType.MACHINE);
 
+		// place portal
+		Place(lvl, x0,NH-1, 2,6, TileType.PORTAL);
+		
 		return lvl;
 	}
 	
@@ -412,7 +422,7 @@ public class LevelGenerator : MonoBehaviour
 				GameObject go = CreateTile(x, y, level);
 				if(go != null) {
 					go.transform.parent = go_parent.transform;
-					go.transform.localPosition = new Vector3(x, y);
+					go.transform.localPosition += new Vector3(x, y);
 				}
 			}
 		}
