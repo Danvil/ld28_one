@@ -8,6 +8,7 @@ public enum TileType
 	PLAYER,
 	AGENT,
 	DRONE,
+	MACHINE,
 	UNKNOWN
 }
 
