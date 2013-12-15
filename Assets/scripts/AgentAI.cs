@@ -3,19 +3,17 @@ using System.Collections;
 
 public class AgentAI : MonoBehaviour {
 
-	AgentMove am;
-	AgentHealth ah;
+	Agent a;
 
 	public float desiredX;
 
 	void Start() {
-		am = GetComponent<AgentMove>();
-		ah = GetComponent<AgentHealth>();
+		a = GetComponent<Agent>();
 	}
 	
 	void Update() {
-		if(ah.IsDead) return;
+		if(a.health.IsDead) return;
 		float dx = desiredX - this.transform.position.x;
-		am.MoveDx = dx;
+		a.move.MoveDx = dx;
 	}
 }

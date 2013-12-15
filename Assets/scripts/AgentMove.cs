@@ -16,9 +16,8 @@ public class AgentMove : MonoBehaviour {
 	public float jumpRate = 0.5f;
 	float nextJump = 0.0f;
 	bool hasSupport = false;
-	
-	private Animator animator;
-	AgentHealth ah;
+
+	Agent agent;
 
 	public bool CanJump {
 		get {
@@ -44,20 +43,19 @@ public class AgentMove : MonoBehaviour {
 	}
 	
 	void Start() {
-		animator = GetComponent<Animator>();
-		ah = GetComponent<AgentHealth>();
+		agent = GetComponent<Agent>();
 	}
 
 	void Update() {
 	}
 	
 	void FixedUpdate() {
-		if(ah.IsDead) {
-			animator.SetBool("dead",  true);
+		if(agent.health.IsDead) {
+			agent.animator.SetBool("dead",  true);
 			return;
 		}
 		else {
-			animator.SetBool("dead",  false);
+			agent.animator.SetBool("dead",  false);
 		}
 		float vx = rigidbody2D.velocity.x;
 		float vy = rigidbody2D.velocity.y;
@@ -94,8 +92,8 @@ public class AgentMove : MonoBehaviour {
 		if(Mathf.Abs(vx) > walkSpeedMax) {
 			rigidbody2D.velocity = new Vector2(Mathf.Sign(rigidbody2D.velocity.x)*walkSpeedMax, rigidbody2D.velocity.y);
 		}
-		animator.SetBool("walk",  hasSupport && Mathf.Abs(vx) > 0.3); // moving left/right
-		animator.SetBool("fall", !hasSupport && vy < 0); // moving down
-		animator.SetBool("jump", !hasSupport && vy > 0); // moving up
+		agent.animator.SetBool("walk",  hasSupport && Mathf.Abs(vx) > 0.3); // moving left/right
+		agent.animator.SetBool("fall", !hasSupport && vy < 0); // moving down
+		agent.animator.SetBool("jump", !hasSupport && vy > 0); // moving up
 	}
 }

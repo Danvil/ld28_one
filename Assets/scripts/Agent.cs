@@ -9,6 +9,8 @@ public class Agent : MonoBehaviour {
 	public AgentCarry carry;
 	public AgentSlice slice;
 
+	public bool IsDead { get { return health.IsDead; } }
+
 	void Start() {
 		animator = GetComponent<Animator>();
 		move = GetComponent<AgentMove>();
