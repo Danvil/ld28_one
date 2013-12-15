@@ -10,6 +10,9 @@ public class AgentCarry : MonoBehaviour {
 	public bool DoPickUp { get; set; }
 	public bool DoThrow { get; set; }
 
+	float carryRate = 0.5f;
+	float carrySleep = 0.0f;
+
 	GameObject carry;
 
 	public bool IsCarrying {
@@ -65,12 +68,18 @@ public class AgentCarry : MonoBehaviour {
 			}
 			return;
 		}
+		carrySleep -= Time.deltaTime;
+		if(carrySleep > 0) {
+			return;
+		}
 		if(DoPickUp && !IsCarrying) {
 			PerformPickUp();
+			carrySleep = carryRate;
 			DoPickUp = false;
 		}
 		if(DoThrow && IsCarrying) {
 			PerformThrow(throwForce);
+			carrySleep = carryRate;
 			DoThrow = false;
 		}
 	}

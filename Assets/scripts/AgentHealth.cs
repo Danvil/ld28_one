@@ -73,13 +73,24 @@ public class AgentHealth : MonoBehaviour {
 	void Update() {
 	}
 
+	float EnergyToDamage(float e) {
+		// 3*3*10 = 90
+		// 6*6*10 = 360
+		return Mathf.Max(0,e-100.0f) / 100.0f;
+	}
+
 	void OnCollisionEnter2D(Collision2D collision) {
 		if(IsDead) {
 			return;
 		}
 		float v = collision.relativeVelocity.magnitude;
-		if(!IsPlayer && v > 8.0f) {
-			Die();
+		if(!IsPlayer) {
+			// kinetic energy
+			float e = 0.5f*collision.rigidbody.mass*v*v;
+			// energy to damage
+			float dmg = EnergyToDamage(e);
+			// take damage
+			Health -= dmg;
 		}
 	}
 

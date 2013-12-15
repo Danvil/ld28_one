@@ -14,19 +14,11 @@ public class AgentMove : MonoBehaviour {
 	
 	public float jumpForce = 3500;	
 	public float jumpRate = 0.5f;
-	private float nextJump = 0.0f;
+	float nextJump = 0.0f;
 	bool hasSupport = false;
 	
 	private Animator animator;
 	AgentHealth ah;
-
-	void Start() {
-		animator = GetComponent<Animator>();
-		ah = GetComponent<AgentHealth>();
-	}
-	
-	void Update() {
-	}
 
 	public bool CanJump {
 		get {
@@ -49,6 +41,14 @@ public class AgentMove : MonoBehaviour {
 
 	bool TestForSupport() {
 		return Tools.ThreeRayTest2D((CircleCollider2D)this.collider2D, this.transform, -Vector2.up, jumpSupportRad, 0.73f, jumpSupportLayerMask);
+	}
+	
+	void Start() {
+		animator = GetComponent<Animator>();
+		ah = GetComponent<AgentHealth>();
+	}
+
+	void Update() {
 	}
 	
 	void FixedUpdate() {
