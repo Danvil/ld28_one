@@ -39,7 +39,7 @@ public class AgentHealth : MonoBehaviour {
 			IsDead = true;
 		}
 		// play animation
-		StartCoroutine(FireDeathExplosion());
+		StartCoroutine(CreateDeathExplosion());
 		// make unmovable
 		this.rigidbody2D.isKinematic = false;
 		this.rigidbody2D.gravityScale = 1.0f;
@@ -48,14 +48,14 @@ public class AgentHealth : MonoBehaviour {
 //		}
 	}
 
-	IEnumerator FireDeathExplosion() {
+	IEnumerator CreateDeathExplosion() {
 		GameObject a = (GameObject)Instantiate(pfExplosion);
+		a.transform.position = this.transform.position + new Vector3(0,0,-3);
 		float dur = 0.0f;
 		foreach(var ps in a.GetComponentsInChildren<ParticleSystem>()) {
 			ps.renderer.sortingLayerName = "Fx";
 			dur = Mathf.Max(dur, ps.duration);
 		}
-		a.transform.position = this.transform.position + new Vector3(0,0,-3);
 		yield return new WaitForSeconds(dur);
 		Destroy(a);
 	}
