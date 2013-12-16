@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update() {
+		Globals.PlayerKilledAgentTime -= Time.deltaTime;
 		agent.move.MoveDx = Input.GetAxis("Horizontal");
 		agent.move.DoJump = Input.GetButton("Jump");
 		agent.move.UseRun = Input.GetKey(KeyCode.LeftShift);

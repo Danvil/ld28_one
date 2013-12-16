@@ -20,8 +20,14 @@ public class Portal : MonoBehaviour {
 			float dx = Mathf.Abs(Globals.player.transform.position.x - this.transform.position.x);
 			float dy = Mathf.Abs(Globals.player.transform.position.y - this.transform.position.y);
 			if(dx < 2.0 && dy < 2.5) {
-				adTeleport.Execute();
-				Globals.game.LoadLevel(level);
+				// check if allowed
+				if(!Globals.HasDrunkNumOne && level != 1) {
+					Globals.messages.Show("\"You are only allowed in #1\"\n\"Looser\"",0.0f);
+				}
+				else {
+					adTeleport.Execute();
+					Globals.game.LoadLevel(level);
+				}
 			}
 		}
 	}

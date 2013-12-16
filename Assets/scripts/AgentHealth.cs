@@ -42,6 +42,7 @@ public class AgentHealth : MonoBehaviour {
 			health = 0;
 			IsDead = true;
 		}
+		Globals.IsHostile = true;
 		// show particles
 		StartCoroutine(Tools.CreateParticleEffect(pfExplosion, this.transform.position));
 		// make unmovable
@@ -95,9 +96,9 @@ public class AgentHealth : MonoBehaviour {
 			return;
 		}
 
-		if(this.gameObject == Globals.player.gameObject) {
-			Globals.messages.Show(string.Format("e={0:0.00}, d={1:0.00}", e, dmg), 0.3f);
-		}
+//		if(this.gameObject == Globals.player.gameObject) {
+//			Globals.messages.Show(string.Format("e={0:0.00}, d={1:0.00}", e, dmg), 0.3f);
+//		}
 		
 		// take damage
 		Health -= dmg;

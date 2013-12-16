@@ -19,6 +19,7 @@ public class Game : MonoBehaviour {
 
 	void Update() {
 		if(Globals.player.agent.health.IsDead) {
+			Globals.IsHostile = false;
 			if(!showedGameOverMessage) {
 				StartCoroutine(ShowGameOver());
 				showedGameOverMessage = true;
@@ -46,6 +47,8 @@ public class Game : MonoBehaviour {
 		StartGame();
 	}
 
+	const bool InitialSkillLevel = false;
+
 	void StartGame() {
 		showedGameOverMessage = false;
 		showedGameWonMessage = false;
@@ -53,14 +56,24 @@ public class Game : MonoBehaviour {
 		GameObject pgo = (GameObject)Instantiate(plPlayer);
 		Globals.player = pgo.GetComponentInChildren<Player>();
 		// set player
-		Globals.player.agent.HasKnive = false;
-		Globals.player.agent.HasJump = false;
-		Globals.player.agent.HasSpeed = false;
-		Globals.player.agent.HasCarry = false;
-		Globals.player.agent.HasRainbow = false;
-		Globals.player.agent.HasUltimate = false;
+		Globals.player.agent.HasKnive = InitialSkillLevel;
+		Globals.player.agent.HasJump = InitialSkillLevel;
+		Globals.player.agent.HasSpeed = InitialSkillLevel;
+		Globals.player.agent.HasCarry = InitialSkillLevel;
+		Globals.player.agent.HasRainbow = InitialSkillLevel;
+		Globals.player.agent.HasUltimate = InitialSkillLevel;
 		// generate level
 		LoadLevel(0);
+		// show task
+		StartCoroutine(ShowTask());
+	}
+
+	IEnumerator ShowTask() {
+		Globals.messages.Show("I should get my daily share.", 0.0f);
+		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+		Globals.messages.Show("Let's find area #1.", 0.0f);
+		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+		Globals.messages.Show("Press 'l' to enter a portal.", 0.0f);
 	}
 
 	IEnumerator ShowGameOver() {
@@ -77,6 +90,12 @@ public class Game : MonoBehaviour {
 	}
 
 	public void LoadLevel(int i) {
+		if(i == 0) {
+			Globals.LeftLevel = true;
+		}
+		else {
+			Globals.LeftLevel = false;
+		}
 		// go through portal
 		// delete current level
 		GameObject.Destroy(Globals.level);
@@ -98,8 +117,26 @@ public class Game : MonoBehaviour {
 				m.num = i;
 			}
 		}
+		if(i != 1) {
+			// warning
+			StartCoroutine(ShowWarning());
+		}
 		// go through
 		Globals.levelId = i;
+	}
+
+	IEnumerator ShowWarning() {
+		if(!Globals.IsHostile) {
+			Globals.messages.Show("\"You are not allowed here.\"", 0.0f);
+			yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+			Globals.messages.Show("\"Get out or we kill you!\"", 0.0f);
+			yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()+3.0f);
+			if(Globals.LeftLevel) {
+				yield break;
+			}
+		}
+		Globals.messages.Show("\"Kill the intruder!\"", 0.0f);
+		Globals.IsHostile = true;
 	}
 
 	Level CreateLevel(int i) {

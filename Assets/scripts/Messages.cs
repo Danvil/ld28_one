@@ -21,7 +21,7 @@ public class Messages : MonoBehaviour {
 
 	public void Show(string text, float dur) {
 		currText = text;
-		currDur = dur + text.Length * letterTime;
+		currDur = dur + text.Length * 1.2f*letterTime;
 		textType = "";
 		textTypeNext = 0;
 	}

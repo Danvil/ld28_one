@@ -4,6 +4,8 @@ using System.Collections;
 public class AgentSlice : MonoBehaviour {
 
 	static int ATTACK_LAYER_MASK = (1<<10) + (1<<11);
+
+	public const float ATTACK_RANGE = 0.6f;
 	
 	Agent agent;
 
@@ -30,7 +32,11 @@ public class AgentSlice : MonoBehaviour {
 			nextAttack = attackRate;
 			AgentHealth target = FindAttackTarget();
 			if(target != null) {
+				bool wasDead = target.IsDead;
 				target.Health -= damage;
+				if(Globals.player.gameObject == this.gameObject && target.IsDead && !wasDead) {
+					Globals.PlayerKilledAgentTime = Time.time;
+				}
 				Vector2 pos = 0.5f*(target.transform.position.XY() + this.transform.position.XY());
 				StartCoroutine(Tools.CreateParticleEffect(pfSlice, pos));
 			}
@@ -41,7 +47,7 @@ public class AgentSlice : MonoBehaviour {
 		// what direction are we looking at?
 		float dir = this.transform.localScale.x;
 		// find object
-		RaycastHit2D hit = Tools.PickNeighbour((CircleCollider2D)collider2D, transform, dir*Vector3.right, 0.5f, ATTACK_LAYER_MASK);
+		RaycastHit2D hit = Tools.PickNeighbour((CircleCollider2D)collider2D, transform, dir*Vector3.right, ATTACK_RANGE, ATTACK_LAYER_MASK);
 		if(!hit) {
 			return null;
 		}

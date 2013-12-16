@@ -47,7 +47,7 @@ public class LevelGenerator : MonoBehaviour
 		else if(tt == TileType.AGENT) {
 			GameObject go = (GameObject)Instantiate(agent);
 			AgentAI ai = go.GetComponent<AgentAI>();
-			ai.desiredX = x;
+			ai.Home = new Vector2(x,y);
 			return go;
 		}
 		else if(tt == TileType.DRONE) {
@@ -632,8 +632,8 @@ public class LevelGenerator : MonoBehaviour
 		// place machine
 		Place(lvl, x0,NH-1, 8,6, TileType.MACHINE);
 
-//		// place portal
-//		Place(lvl, x0,NH-1, 3,6, TileType.PORTAL_0);
+		// place portal
+		Place(lvl, x0,NH-1, 3,6, TileType.PORTAL_0);
 		
 		return lvl;
 	}

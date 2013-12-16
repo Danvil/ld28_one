@@ -22,7 +22,6 @@ public class Machine : MonoBehaviour {
 	}
 
 	IEnumerator ShowSkillMessage() {
-		const float MSG_DUR = 1.76f;
 		string[] msgs = {
 			"#1: For loosers only",
 			"#2: Strength of a mountain\nUse 'k' to pick and throw.",
@@ -32,18 +31,26 @@ public class Machine : MonoBehaviour {
 			"#6: Glamor!",
 			"#7: The ultimate Power!",
 		};
-		Globals.messages.Show(msgs[num-1], MSG_DUR);
+		Globals.messages.Show(msgs[num-1], 1.36f);
 		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
 		string[] answer = {
-			"\"I can't stand it anymore!\"",
-			"\"Nothing can stop me now!\"",
-			"\"No one can keep my down!\"",
-			"\"They will taste my steel.\"",
-			"\"The hand is faster than the eye.\"",
-			"\"Let them eat cake\"",
-			"\"The force is strong with this one\""
+			"I can't stand it anymore!",
+			"Nothing can stop me now!",
+			"No one can keep my down!",
+			"They will taste my steel.",
+			"The hand is faster than the eye.",
+			"Let them eat cake",
+			"The force is strong with this one"
 		};
-		Globals.messages.Show(answer[num-1], MSG_DUR);
+		Globals.messages.Show(answer[num-1], 0.56f);
+		if(num == 1) {
+			yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+			Globals.messages.Show("AAArrrrghh!!", 0.0f);
+			yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+			Globals.messages.Show("Theses #2s think there are better?", 0.0f);
+			yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
+			Globals.messages.Show("I will show them!", 0.0f);
+		}
 	}
 
 	void Update() {
@@ -58,6 +65,7 @@ public class Machine : MonoBehaviour {
 			switch(num) {
 			case 1:
 				Globals.player.agent.HasDump = true;
+				Globals.HasDrunkNumOne = true;
 				break;
 			case 2:
 				Globals.player.agent.HasCarry = true;
