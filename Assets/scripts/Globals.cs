@@ -1,3 +1,4 @@
+using UnityEngine;
 
 static class Globals
 {
@@ -7,4 +8,5 @@ static class Globals
 	static public int levelId = 0;
 	static public LevelGenerator lvlGen;
 	static public Messages messages;
+	static public GameObject level;
 }

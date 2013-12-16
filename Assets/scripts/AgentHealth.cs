@@ -6,6 +6,9 @@ public class AgentHealth : MonoBehaviour {
 	public float healthMax = 10.0f;
 	public GameObject pfExplosion;
 
+	public float energyDmgBase = 450.0f;
+	public float energyDmgRate = 200.0f;
+
 	private float health;
 	public float Health {
 		get {
@@ -44,6 +47,7 @@ public class AgentHealth : MonoBehaviour {
 		// make unmovable
 		this.rigidbody2D.isKinematic = false;
 		this.rigidbody2D.gravityScale = 1.0f;
+		this.collider2D.sharedMaterial = agent.pfObjectMaterial;
 		this.renderer.sortingLayerName = "Objects";
 		//		if(!IsPlayer) {
 //			StartCoroutine(DestroyMe());
@@ -55,9 +59,12 @@ public class AgentHealth : MonoBehaviour {
 		Destroy(this.gameObject);
 	}
 
+	Agent agent;
+
 	void Start() {
 		IsDead = false;
 		Health = healthMax;
+		agent = GetComponent<Agent>();
 	}
 	
 	void Update() {
@@ -68,7 +75,7 @@ public class AgentHealth : MonoBehaviour {
 		// 4*4*10 = 160
 		// 6*6*10 = 360
 		// 8*8*10 = 640
-		return Mathf.Max(0,e-450.0f) / 200.0f;
+		return Mathf.Max(0, e-energyDmgBase) / energyDmgRate;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {

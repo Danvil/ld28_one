@@ -71,8 +71,10 @@ public class AgentCarry : MonoBehaviour {
 		carry = hit.transform.gameObject;
 		carry.rigidbody2D.isKinematic = true;
 		carry.transform.parent = this.transform;
-		if(carry.renderer.sortingLayerName == "Wall")
+		if(carry.renderer.sortingLayerName == "Wall") {
 			carry.renderer.sortingLayerName = "Objects";
+			carry.collider2D.sharedMaterial = agent.pfObjectMaterial;
+		}
 	}
 	
 	void PerformThrow(float forceAmount) {
@@ -81,7 +83,7 @@ public class AgentCarry : MonoBehaviour {
 		}
 		// disconnect
 		carry.rigidbody2D.isKinematic = false;
-		carry.transform.parent = null;
+		carry.transform.parent = Globals.level.transform;
 		// apply velocities
 		carry.rigidbody2D.velocity = rigidbody2D.velocity;
 		carry.rigidbody2D.angularVelocity = rigidbody2D.angularVelocity;

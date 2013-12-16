@@ -42,7 +42,7 @@ public class Game : MonoBehaviour {
 
 	void RestartGame() {
 		GameObject.Destroy(Globals.player);
-		DestroyLevel();
+		GameObject.Destroy(Globals.level);
 		StartGame();
 	}
 
@@ -75,24 +75,21 @@ public class Game : MonoBehaviour {
 		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
 		Globals.messages.Show("Press 'l' to play anew", 100000);
 	}
-	
-	void DestroyLevel() {
-		GameObject old_level_go = GameObject.Find("Level");
-		Destroy(old_level_go);
-	}
 
 	public void LoadLevel(int i) {
 		// go through portal
 		// delete current level
-		DestroyLevel();
+		GameObject.Destroy(Globals.level);
 		// create new
 		Level lvl = CreateLevel(i);
-		Globals.lvlGen.CreateGameobjects(lvl);
+		Globals.level = Globals.lvlGen.CreateGameobjects(lvl);
 		// set player position by finding correct portal
-		foreach(Portal p in GameObject.FindObjectsOfType<Portal>()) {
-			if(p.level == Globals.levelId) {
-				Globals.player.transform.position = p.transform.position;
-				break;
+		if(i == 0) {
+			foreach(Portal p in GameObject.FindObjectsOfType<Portal>()) {
+				if(p.level == Globals.levelId) {
+					Globals.player.transform.position = p.transform.position;
+					break;
+				}
 			}
 		}
 		if(i != 0) {

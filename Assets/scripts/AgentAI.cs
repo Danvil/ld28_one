@@ -13,7 +13,9 @@ public class AgentAI : MonoBehaviour {
 	
 	void Update() {
 		if(a.health.IsDead) return;
-		float dx = desiredX - this.transform.position.x;
-		a.move.MoveDx = dx;
+		if(a.move.hasSupport) {
+			float dx = desiredX - this.transform.position.x;
+			a.move.MoveDx = dx;
+		}
 	}
 }

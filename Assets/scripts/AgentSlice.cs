@@ -10,6 +10,8 @@ public class AgentSlice : MonoBehaviour {
 	public float attackRate = 0.6f;
 	float nextAttack = 0.0f;
 	public GameObject pfSlice;
+
+	public float damage = 3.0f;
 	
 	public bool DoAttack { get; set; }
 	
@@ -28,7 +30,7 @@ public class AgentSlice : MonoBehaviour {
 			nextAttack = attackRate;
 			AgentHealth target = FindAttackTarget();
 			if(target != null) {
-				target.Health -= 2.0f;
+				target.Health -= damage;
 				Vector2 pos = 0.5f*(target.transform.position.XY() + this.transform.position.XY());
 				StartCoroutine(Tools.CreateParticleEffect(pfSlice, pos));
 			}

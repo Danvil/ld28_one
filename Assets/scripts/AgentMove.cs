@@ -15,9 +15,10 @@ public class AgentMove : MonoBehaviour {
 	public bool UseRun = false;
 	
 	public float jumpForce = 3500;	
-	public float jumpRate = 0.5f;
+	public float jumpRate = 0.24f;
 	float nextJump = 0.0f;
-	bool hasSupport = false;
+	public bool hasSupport { get; private set; }
+	bool doubleJumpFlag = false;
 
 	Agent agent;
 
@@ -73,6 +74,9 @@ public class AgentMove : MonoBehaviour {
 		Vector3 force = Vector3.zero;
 		// check if agent is supported from below
 		hasSupport = TestForSupport();
+		if(hasSupport && doubleJumpFlag) {
+			doubleJumpFlag = false;
+		}
 		// move left/right
 		float dx = MoveDx * walkForce;
 		if(Mathf.Abs(dx) > 0) {
@@ -83,11 +87,13 @@ public class AgentMove : MonoBehaviour {
 			walkIsFlipped = (dx < 0);
 		}
 		else {
-			float ax = -Mathf.Sign(vx)*walkBreakForce;
-			if(!hasSupport) {
-				ax *= walkAirPercent;
+			if(Mathf.Abs(vx) > 0.05f) {
+				float ax = -Mathf.Sign(vx)*walkBreakForce;
+				if(!hasSupport) {
+					ax *= walkAirPercent;
+				}
+				force += new Vector3(ax, 0, 0);
 			}
-			force += new Vector3(ax, 0, 0);
 		}
 		if(running) {
 			dx *= 2.0f;
@@ -95,12 +101,12 @@ public class AgentMove : MonoBehaviour {
 		// flip if necessary
 		this.transform.localScale = new Vector3((walkIsFlipped ? -1 : +1), 1, 1);
 		// jump
-		bool isJumping = hasSupport && DoJump && CanJump;
+		bool isJumping = DoJump && CanJump && (hasSupport || (agent.HasJump && !doubleJumpFlag));
 		if(isJumping) {
-			float jf = jumpForce;
-			if(agent.HasJump) {
-				jf *= 1.41f;
+			if(!hasSupport) {
+				doubleJumpFlag = true;
 			}
+			float jf = jumpForce;
 			force += new Vector3(0, jf, 0);
 			nextJump = Time.time + jumpRate;
 		}

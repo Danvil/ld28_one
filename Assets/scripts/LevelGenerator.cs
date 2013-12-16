@@ -320,9 +320,9 @@ public class LevelGenerator : MonoBehaviour
 	}
 
 	void FillBlock(Level lvl, int bx, int by, int type) {
-		const int NUM = 6;
+		const int NUM = 11;
 		int[] fill_flip = new int[NUM] {
-			0,0,1,1,1,1
+			0,0,0,0,0,1,1,1,1,1,1
 		};
 		int[,] fill = new int[NUM,BH*BW]
 		{
@@ -342,6 +342,56 @@ public class LevelGenerator : MonoBehaviour
 				1,0,0,0,0,0,0,0,0,0,0,1,
 				1,0,0,0,0,1,1,0,0,0,0,1,
 				1,0,0,0,0,1,1,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,1,1,0,0,0,0,1,
+				1,0,0,0,1,1,1,1,0,0,0,1,
+				1,0,0,1,1,1,1,1,1,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,1,1,1,1,1,1,0,0,1,
+				1,0,1,1,0,0,0,0,1,1,0,1,
+				1,0,1,1,0,0,0,0,1,1,0,1,
+				1,0,0,1,1,1,1,1,1,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,1,0,0,0,0,1,0,0,1,
+				1,0,1,1,0,1,1,0,1,1,0,1,
+				1,0,1,1,0,1,1,0,1,1,0,1,
+				1,0,0,1,0,0,0,0,1,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,1,0,0,0,0,0,0,0,1,
+				1,0,0,1,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,1,0,0,0,0,0,0,0,1,
+				1,0,1,1,1,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1
+			},
+			{
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,0,0,0,0,0,1,1,1,0,1,
+				1,0,0,0,0,0,0,0,0,0,0,1,
 				1,0,0,0,0,0,0,0,0,0,0,1,
 				1,0,0,0,0,0,0,0,0,0,0,1,
 				1,1,1,1,1,1,1,1,1,1,1,1
@@ -402,19 +452,23 @@ public class LevelGenerator : MonoBehaviour
 		// assert room connectivity
 		if((type & 1) > 0) {
 			// assert top access => delete y=1 and y=2
-			FillRegion(lvl, bx, by, 1,BW-1, 1,3, TileType.NONE);
+//			FillRegion(lvl, bx, by, 1,BW-1, 1,3, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,BW-1, 1,2, TileType.NONE);
 		}
 		if((type & 2) > 0) {
 			// assert right access => delete x=9 and x=10
-			FillRegion(lvl, bx, by, 9,11, 1,BH-1, TileType.NONE);
+//			FillRegion(lvl, bx, by, 9,11, 1,BH-1, TileType.NONE);
+			FillRegion(lvl, bx, by, 10,11, 1,BH-1, TileType.NONE);
 		}
 		if((type & 4) > 0) {
 			// assert bottom access => delete y=5 and y=6
-			FillRegion(lvl, bx, by, 1,BW-1, 5,7, TileType.NONE);
+//			FillRegion(lvl, bx, by, 1,BW-1, 5,7, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,BW-1, 6,7, TileType.NONE);
 		}
 		if((type & 8) > 0) {
 			// assert left access => delete x=1 and x=2
-			FillRegion(lvl, bx, by, 1,3, 1,BH-1, TileType.NONE);
+//			FillRegion(lvl, bx, by, 1,3, 1,BH-1, TileType.NONE);
+			FillRegion(lvl, bx, by, 1,2, 1,BH-1, TileType.NONE);
 		}
 	}
 
@@ -576,12 +630,15 @@ public class LevelGenerator : MonoBehaviour
 		Place(lvl, x0y0,0, 4,6, TileType.PORTAL_0);
 		
 		// place machine
-		Place(lvl, x0,NH-1, 7,6, TileType.MACHINE);
+		Place(lvl, x0,NH-1, 8,6, TileType.MACHINE);
 
+//		// place portal
+//		Place(lvl, x0,NH-1, 3,6, TileType.PORTAL_0);
+		
 		return lvl;
 	}
 	
-	public void CreateGameobjects(Level level) {
+	public GameObject CreateGameobjects(Level level) {
 		// create parent gameobject
 		GameObject go_parent = new GameObject();
 		go_parent.name = "Level";
@@ -596,6 +653,7 @@ public class LevelGenerator : MonoBehaviour
 				}
 			}
 		}
+		return go_parent;
 	}
 
 	static int Color32ToInt(Color32 col) {

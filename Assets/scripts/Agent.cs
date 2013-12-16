@@ -8,6 +8,7 @@ public class Agent : MonoBehaviour {
 	public AgentHealth health;
 	public AgentCarry carry;
 	public AgentSlice slice;
+	public PhysicsMaterial2D pfObjectMaterial;
 
 	public bool IsDead { get { return health.IsDead; } }
 

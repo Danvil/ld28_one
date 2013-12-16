@@ -11,7 +11,7 @@ public class Messages : MonoBehaviour {
 	string textType = "";
 	int textTypeNext = 0;
 
-	public float letterTime = 0.07f;
+	public float letterTime = 0.10f;
 
 	float letterTick = 0;
 

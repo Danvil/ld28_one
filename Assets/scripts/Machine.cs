@@ -25,12 +25,12 @@ public class Machine : MonoBehaviour {
 		const float MSG_DUR = 1.76f;
 		string[] msgs = {
 			"#1: For loosers only",
-			"#2: Strength of a mountain",
-			"#3: Jump high into the sky!",
-			"#4: Secret ninja skills!",
-			"#5: Fast as lightning",
+			"#2: Strength of a mountain\nUse 'k' to pick and throw.",
+			"#3: Jump high into the sky!\nJump again in mid air.",
+			"#4: Secret ninja skills!\nPress 'j' to slice.",
+			"#5: Fast as lightning\nHold 'shift' to run.",
 			"#6: Glamor!",
-			"#7: Ultimate Power!",
+			"#7: The ultimate Power!",
 		};
 		Globals.messages.Show(msgs[num-1], MSG_DUR);
 		yield return new WaitForSeconds(Globals.messages.GetCurrentDuration()-0.05f);
